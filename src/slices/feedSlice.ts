@@ -1,8 +1,11 @@
 import { getFeedsApi, TFeedsResponse } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { reqGetOrderByNumber } from './orderSlice';
+import { TOrder } from '@utils-types';
 
 interface TFeedSliceInitialState {
   feed: TFeedsResponse;
+  orderByNumber: TOrder | null;
   loading: boolean;
   error: string | null;
 }
@@ -14,6 +17,7 @@ const initialState: TFeedSliceInitialState = {
     success: false,
     totalToday: 0
   },
+  orderByNumber: null,
   loading: false,
   error: null
 };
@@ -29,7 +33,15 @@ const feedSlice = createSlice({
   selectors: {
     getFeed: (state) => state.feed,
     getFeedLoading: (state) => state.loading,
-    getFeedError: (state) => state.error
+    getFeedError: (state) => state.error,
+    getOrderByNumber: (state, number: number) => {
+      const res = state.feed.orders.find((item) => item.number === +number);
+      if (res) {
+        return res;
+      }
+
+      reqGetOrderByNumber(number);
+    }
   },
   extraReducers: (builder) => {
     builder
