@@ -6,7 +6,7 @@ interface TConstructorItems {
   bun: TIngredient | null;
   price: number;
   ingredients: TIngredient[];
-  constructorOrder: TOrder | null;
+  orderedBurger: TOrder | null;
   loading: boolean;
   error: string | null;
 }
@@ -15,7 +15,7 @@ const initialState: TConstructorItems = {
   bun: null,
   price: 0,
   ingredients: [],
-  constructorOrder: null,
+  orderedBurger: null,
   loading: false,
   error: null
 };
@@ -35,6 +35,9 @@ const constructorSlice = createSlice({
       } else {
         state.ingredients = [...state.ingredients, action.payload];
       }
+    },
+    clearOrderBurgerData: (state) => {
+      state.orderedBurger = null;
     },
     clearConstructor: (state) => {
       state.bun = null;
@@ -79,19 +82,22 @@ const constructorSlice = createSlice({
     }
   },
   selectors: {
-    getConstructorItems: (state) => state
+    getConstructorState: (state) => state,
+    getOrderBurger: (state) => state.orderedBurger,
+    getOrderBurgerLoading: (state) => state.loading
   },
   extraReducers: (builder) => {
     builder
       .addCase(requestOrder.pending, (state) => {
         state.error = null;
+        state.orderedBurger = null;
         state.loading = true;
       })
       .addCase(
         requestOrder.fulfilled,
         (state, action: PayloadAction<TNewOrderResponse>) => {
           state.loading = false;
-          state.constructorOrder = action.payload.order;
+          state.orderedBurger = action.payload.order;
         }
       )
       .addCase(requestOrder.rejected, (state, action) => {
@@ -101,10 +107,12 @@ const constructorSlice = createSlice({
   }
 });
 
-export const { getConstructorItems } = constructorSlice.selectors;
+export const { getConstructorState, getOrderBurgerLoading, getOrderBurger } =
+  constructorSlice.selectors;
 export const {
   addIngredient,
   clearConstructor,
+  clearOrderBurgerData,
   moveUpConstructorIngredient,
   moveDownConstructorIngredient,
   deleteConstructorIngredient

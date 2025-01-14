@@ -20,7 +20,6 @@ import { useDispatch } from '../../services/store';
 import { requestIngredients } from '../../slices/ingredientsSlice';
 import { checkUserAuth } from '../../slices/authSlice';
 import { requestFeeds } from '../../slices/feedSlice';
-import { clearOrder } from '../../slices/orderSlice';
 
 const App = () => {
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ const App = () => {
   }, []);
 
   const onCloseModal = () => {
-    dispatch(clearOrder());
     navigate(backgroundLocation);
   };
 

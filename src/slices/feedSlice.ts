@@ -1,11 +1,16 @@
-import { getFeedsApi, TFeedsResponse } from '@api';
+import {
+  getFeedsApi,
+  getOrderByNumberApi,
+  TFeedsResponse,
+  TOrderResponse
+} from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { reqGetOrderByNumber } from './orderSlice';
 import { TOrder } from '@utils-types';
 
 interface TFeedSliceInitialState {
   feed: TFeedsResponse;
   orderByNumber: TOrder | null;
+  orderByNumberLoading: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -18,12 +23,18 @@ const initialState: TFeedSliceInitialState = {
     totalToday: 0
   },
   orderByNumber: null,
+  orderByNumberLoading: false,
   loading: false,
   error: null
 };
 
 export const requestFeeds = createAsyncThunk('orders-all', async () =>
   getFeedsApi()
+);
+
+export const reqGetOrderByNumber = createAsyncThunk(
+  'order-by-number',
+  async (data: number) => getOrderByNumberApi(data)
 );
 
 const feedSlice = createSlice({
@@ -34,14 +45,8 @@ const feedSlice = createSlice({
     getFeed: (state) => state.feed,
     getFeedLoading: (state) => state.loading,
     getFeedError: (state) => state.error,
-    getOrderByNumber: (state, number: number) => {
-      const res = state.feed.orders.find((item) => item.number === +number);
-      if (res) {
-        return res;
-      }
-
-      reqGetOrderByNumber(number);
-    }
+    getOrderByNumber: (state) => state.orderByNumber,
+    getOrderByNumberLoading: (state) => state.loading
   },
   extraReducers: (builder) => {
     builder
@@ -59,9 +64,32 @@ const feedSlice = createSlice({
       .addCase(requestFeeds.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message!;
+      })
+
+      .addCase(reqGetOrderByNumber.pending, (state) => {
+        state.error = null;
+        state.orderByNumberLoading = true;
+        state.orderByNumber = null;
+      })
+      .addCase(
+        reqGetOrderByNumber.fulfilled,
+        (state, action: PayloadAction<TOrderResponse>) => {
+          state.orderByNumberLoading = false;
+          state.orderByNumber = action.payload.orders[0];
+        }
+      )
+      .addCase(reqGetOrderByNumber.rejected, (state, action) => {
+        state.orderByNumberLoading = false;
+        state.error = action.error.message!;
       });
   }
 });
 
-export const { getFeed, getFeedLoading, getFeedError } = feedSlice.selectors;
+export const {
+  getFeed,
+  getFeedLoading,
+  getFeedError,
+  getOrderByNumber,
+  getOrderByNumberLoading
+} = feedSlice.selectors;
 export const FeedReducer = feedSlice.reducer;

@@ -7,7 +7,8 @@ import {
   TAuthResponse,
   TLoginData,
   TRegisterData,
-  TUserResponse
+  TUserResponse,
+  updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder, TUser } from '@utils-types';
@@ -15,7 +16,7 @@ import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
 
 interface TAuthSlice {
   isAuthChecked: boolean;
-  user: TUser;
+  user: TUser | null;
   userOrders: TOrder[];
   loading: boolean;
   error: string | null;
@@ -24,13 +25,15 @@ interface TAuthSlice {
 const initialState: TAuthSlice = {
   isAuthChecked: false,
   userOrders: [],
-  user: {
-    email: '',
-    name: ''
-  },
+  user: null,
   loading: false,
   error: null
 };
+
+export const updateUserData = createAsyncThunk(
+  'change-user-data',
+  async (data: TRegisterData) => updateUserApi(data)
+);
 
 export const requestUserOrders = createAsyncThunk('my-userOrders', async () =>
   getOrdersApi()
@@ -84,6 +87,21 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(updateUserData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        updateUserData.fulfilled,
+        (state, action: PayloadAction<TUserResponse>) => {
+          state.loading = false;
+          state.user = action.payload.user;
+        }
+      )
+      .addCase(updateUserData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message!;
+      })
+
       .addCase(requestAuth.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -158,10 +176,7 @@ const authSlice = createSlice({
           if (action.payload.success) {
             localStorage.removeItem('refreshToken');
             deleteCookie('accessToken');
-            state.user = {
-              name: '',
-              email: ''
-            };
+            state.user = null;
             state.userOrders = [];
           }
         }

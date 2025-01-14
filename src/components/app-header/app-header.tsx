@@ -6,5 +6,5 @@ import { getUserData } from '../../slices/authSlice';
 export const AppHeader: FC = () => {
   const user = useSelector(getUserData);
 
-  return <AppHeaderUI userName={user.name} />;
+  return <AppHeaderUI userName={user ? user.name : ''} />;
 };
