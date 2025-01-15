@@ -161,8 +161,12 @@ export const registerUserApi = (data: TRegisterData) =>
   })
     .then((res) => checkResponse<TAuthResponse>(res))
     .then((data) => {
-      if (data?.success) return data;
-      return Promise.reject(data);
+      if (!data || !data.success) {
+        return Promise.reject(data);
+      }
+      localStorage.setItem('refreshToken', data.refreshToken);
+      setCookie('accessToken', data.accessToken);
+      return data;
     });
 
 export type TLoginData = {
@@ -181,8 +185,12 @@ export const loginUserApi = (data: TLoginData) =>
   })
     .then((res) => checkResponse<TAuthResponse>(res))
     .then((data) => {
-      if (data?.success) return data;
-      return Promise.reject(data);
+      if (!data || !data.success) {
+        return Promise.reject(data);
+      }
+      localStorage.setItem('refreshToken', data.refreshToken);
+      setCookie('accessToken', data.accessToken);
+      return data;
     });
 
 // запрос на восстановление пароля

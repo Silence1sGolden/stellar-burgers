@@ -18,6 +18,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
         <div className={styles.menu_part_left}>
           <Link
             to='/'
+            state={{ to: '/' }}
             className={
               location.pathname === '/'
                 ? `${styles.link} ${styles.link_active}`
@@ -31,6 +32,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
           </Link>
           <Link
             to='/feed'
+            state={{ to: '/feed' }}
             className={
               location.pathname === '/feed'
                 ? `${styles.link} ${styles.link_active}`
@@ -51,7 +53,11 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
               : styles.link
           }
         >
-          <Link to='/profile' className={styles.link}>
+          <Link
+            to='/profile'
+            state={{ to: '/profile' }}
+            className={styles.link}
+          >
             <ProfileIcon type={'primary'} />
             <p className='text text_type_main-default ml-2'>
               {userName || 'Личный кабинет'}

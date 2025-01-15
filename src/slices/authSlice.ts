@@ -31,31 +31,27 @@ const initialState: TAuthSlice = {
 };
 
 export const updateUserData = createAsyncThunk(
-  'change-user-data',
-  async (data: TRegisterData) => updateUserApi(data)
+  'user/updateData',
+  (data: TRegisterData) => updateUserApi(data)
 );
 
-export const requestUserOrders = createAsyncThunk('my-userOrders', async () =>
-  getOrdersApi()
+export const requestUserOrders = createAsyncThunk(
+  'user/userOrders',
+  getOrdersApi
 );
 
-export const requestAuth = createAsyncThunk(
-  'user/Authentification',
-  async (data: TLoginData) => loginUserApi(data)
+export const requestAuth = createAsyncThunk('user/auth', (data: TLoginData) =>
+  loginUserApi(data)
 );
 
 export const requestRegister = createAsyncThunk(
-  'user/Registration',
-  async (data: TRegisterData) => registerUserApi(data)
+  'user/registration',
+  (data: TRegisterData) => registerUserApi(data)
 );
 
-export const getUser = createAsyncThunk('user/getUser', async () =>
-  getUserApi()
-);
+export const getUser = createAsyncThunk('user/getUser', getUserApi);
 
-export const logoutUser = createAsyncThunk('user/logout', async () =>
-  logoutApi()
-);
+export const logoutUser = createAsyncThunk('user/logout', logoutApi);
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkUser',
@@ -71,7 +67,7 @@ export const checkUserAuth = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: 'user',
   initialState: initialState,
   reducers: {
     authChecked: (state) => {
@@ -111,8 +107,6 @@ const authSlice = createSlice({
         (state, action: PayloadAction<TAuthResponse>) => {
           state.loading = false;
           state.user = action.payload.user;
-          localStorage.setItem('refreshToken', action.payload.refreshToken);
-          setCookie('accessToken', action.payload.accessToken);
         }
       )
       .addCase(requestAuth.rejected, (state, action) => {

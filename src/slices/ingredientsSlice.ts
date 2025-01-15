@@ -10,7 +10,7 @@ interface TIngredientSlice {
 
 export const requestIngredients = createAsyncThunk(
   'ingredients/getAll',
-  async () => getIngredientsApi()
+  getIngredientsApi
 );
 
 const initialState: TIngredientSlice = {

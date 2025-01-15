@@ -3,7 +3,6 @@ import { TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  clearConstructor,
   clearOrderBurgerData,
   getConstructorState,
   getOrderBurger,
@@ -32,7 +31,11 @@ export const BurgerConstructor: FC = () => {
       navigate('/login');
     } else {
       dispatch(
-        requestOrder(constructorItems.ingredients.map((item) => item._id))
+        requestOrder([
+          constructorItems.bun._id,
+          ...constructorItems.ingredients.map((item) => item._id),
+          constructorItems.bun._id
+        ])
       );
     }
   };
@@ -41,7 +44,6 @@ export const BurgerConstructor: FC = () => {
     if (!orderRequest) {
       dispatch(requestFeeds());
       dispatch(clearOrderBurgerData());
-      dispatch(clearConstructor());
     }
   };
 

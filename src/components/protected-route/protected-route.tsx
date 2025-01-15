@@ -19,11 +19,11 @@ export function ProtectedRoute({ children, OnlyOnAuth }: ProtectedRouteProps) {
   const isAuthChecked = useSelector(isAuthCheckedSelector);
   const user = useSelector(getUserData);
 
-  useEffect(() => {
-    if (!isAuthChecked) {
-      dispatch(checkUserAuth());
-    }
-  }, [dispatch]);
+  if (!isAuthChecked) {
+    dispatch(checkUserAuth());
+  }
+
+  console.log(children);
 
   if (!isAuthChecked) {
     return <Preloader />;
@@ -34,7 +34,7 @@ export function ProtectedRoute({ children, OnlyOnAuth }: ProtectedRouteProps) {
   }
 
   if (user && OnlyOnAuth) {
-    const from = location.state?.from || { pathname: '/' };
+    const from = location.state?.to || { pathname: '/' };
     return <Navigate replace to={from} />;
   }
 

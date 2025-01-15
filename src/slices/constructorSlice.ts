@@ -21,12 +21,12 @@ const initialState: TConstructorItems = {
 };
 
 export const requestOrder = createAsyncThunk(
-  'create-order',
+  'constructorItems/createOrder',
   async (data: string[]) => orderBurgerApi(data)
 );
 
 const constructorSlice = createSlice({
-  name: 'constructor-items',
+  name: 'constructorItems',
   initialState: initialState,
   reducers: {
     addIngredient: (state, action: PayloadAction<TIngredient>) => {
@@ -38,10 +38,6 @@ const constructorSlice = createSlice({
     },
     clearOrderBurgerData: (state) => {
       state.orderedBurger = null;
-    },
-    clearConstructor: (state) => {
-      state.bun = null;
-      state.ingredients = [];
     },
     moveUpConstructorIngredient: (state, action: PayloadAction<number>) => {
       const currentIndex = action.payload;
@@ -98,6 +94,8 @@ const constructorSlice = createSlice({
         (state, action: PayloadAction<TNewOrderResponse>) => {
           state.loading = false;
           state.orderedBurger = action.payload.order;
+          state.ingredients = [];
+          state.bun = null;
         }
       )
       .addCase(requestOrder.rejected, (state, action) => {
@@ -111,7 +109,6 @@ export const { getConstructorState, getOrderBurgerLoading, getOrderBurger } =
   constructorSlice.selectors;
 export const {
   addIngredient,
-  clearConstructor,
   clearOrderBurgerData,
   moveUpConstructorIngredient,
   moveDownConstructorIngredient,

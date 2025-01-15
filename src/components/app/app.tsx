@@ -18,8 +18,6 @@ import { ProtectedRoute } from '../protected-route/protected-route';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { requestIngredients } from '../../slices/ingredientsSlice';
-import { checkUserAuth } from '../../slices/authSlice';
-import { requestFeeds } from '../../slices/feedSlice';
 
 const App = () => {
   const navigate = useNavigate();
@@ -28,9 +26,7 @@ const App = () => {
   const backgroundLocation = location.state?.background;
 
   useEffect(() => {
-    dispatch(checkUserAuth());
     dispatch(requestIngredients());
-    dispatch(requestFeeds());
   }, []);
 
   const onCloseModal = () => {

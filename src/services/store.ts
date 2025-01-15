@@ -12,8 +12,8 @@ import { FeedReducer } from '../slices/feedSlice';
 
 const rootReducer = {
   ingredients: IngredientsReducer,
-  'constructor-items': ConstructorItemsReducer,
-  auth: AuthReducer,
+  constructorItems: ConstructorItemsReducer,
+  user: AuthReducer,
   feed: FeedReducer
 }; // Заменить на импорт настоящего редьюсера
 
