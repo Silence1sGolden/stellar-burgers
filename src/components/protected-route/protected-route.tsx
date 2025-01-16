@@ -23,18 +23,17 @@ export function ProtectedRoute({ children, OnlyOnAuth }: ProtectedRouteProps) {
     dispatch(checkUserAuth());
   }
 
-  console.log(children);
-
   if (!isAuthChecked) {
     return <Preloader />;
   }
 
   if (!user && !OnlyOnAuth) {
-    return <Navigate replace to='/login' />;
+    console.log(location);
+    return <Navigate replace state={{ from: location }} to='/login' />;
   }
 
   if (user && OnlyOnAuth) {
-    const from = location.state?.to || { pathname: '/' };
+    const from = location.state?.from || { pathname: '/' };
     return <Navigate replace to={from} />;
   }
 

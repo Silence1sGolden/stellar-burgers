@@ -1,11 +1,16 @@
 import { orderBurgerApi, TNewOrderResponse } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
+import { v4 as uuidv4 } from 'uuid';
+
+interface TIngredientPayload extends TIngredient {
+  id: string;
+}
 
 interface TConstructorItems {
   bun: TIngredient | null;
   price: number;
-  ingredients: TIngredient[];
+  ingredients: TIngredientPayload[];
   orderedBurger: TOrder | null;
   loading: boolean;
   error: string | null;
@@ -29,12 +34,17 @@ const constructorSlice = createSlice({
   name: 'constructorItems',
   initialState: initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload;
-      } else {
-        state.ingredients = [...state.ingredients, action.payload];
-      }
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TIngredientPayload>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload;
+        } else {
+          state.ingredients = [...state.ingredients, action.payload];
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: uuidv4() }
+      })
     },
     clearOrderBurgerData: (state) => {
       state.orderedBurger = null;
@@ -73,7 +83,7 @@ const constructorSlice = createSlice({
       action: PayloadAction<TConstructorIngredient>
     ) => {
       state.ingredients = state.ingredients.filter(
-        (item) => item._id != action.payload._id
+        (item) => item.id != action.payload.id
       );
     }
   },
