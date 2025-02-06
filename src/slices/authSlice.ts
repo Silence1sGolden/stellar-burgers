@@ -9,10 +9,10 @@ import {
   TRegisterData,
   TUserResponse,
   updateUserApi
-} from '@api';
+} from '../utils/burger-api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder, TUser } from '@utils-types';
-import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, getCookie } from '../utils/cookie';
 
 interface TAuthSlice {
   isAuthChecked: boolean;
@@ -46,12 +46,18 @@ export const requestAuth = createAsyncThunk('user/auth', (data: TLoginData) =>
 
 export const requestRegister = createAsyncThunk(
   'user/registration',
-  (data: TRegisterData) => registerUserApi(data)
+  async (data: TRegisterData) => registerUserApi(data)
 );
 
 export const getUser = createAsyncThunk('user/getUser', getUserApi);
 
-export const logoutUser = createAsyncThunk('user/logout', logoutApi);
+export const logoutUser = createAsyncThunk('user/logout', async function () {
+  return logoutApi().then((data) => {
+    localStorage.removeItem('refreshToken');
+    deleteCookie('accessToken');
+    return data;
+  });
+});
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkUser',
@@ -123,8 +129,6 @@ const authSlice = createSlice({
         (state, action: PayloadAction<TAuthResponse>) => {
           state.loading = false;
           state.user = action.payload.user;
-          localStorage.setItem('refreshToken', action.payload.refreshToken);
-          setCookie('accessToken', action.payload.accessToken);
         }
       )
       .addCase(requestRegister.rejected, (state, action) => {
@@ -168,8 +172,6 @@ const authSlice = createSlice({
         logoutUser.fulfilled,
         (state, action: PayloadAction<{ success: boolean }>) => {
           if (action.payload.success) {
-            localStorage.removeItem('refreshToken');
-            deleteCookie('accessToken');
             state.user = null;
             state.userOrders = [];
           }

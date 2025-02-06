@@ -1,15 +1,14 @@
-import { orderBurgerApi, TNewOrderResponse } from '@api';
+import { orderBurgerApi, TNewOrderResponse } from '../utils/burger-api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
-interface TIngredientPayload extends TIngredient {
+export interface TIngredientPayload extends TIngredient {
   id: string;
 }
 
-interface TConstructorItems {
+export interface TConstructorItems {
   bun: TIngredient | null;
-  price: number;
   ingredients: TIngredientPayload[];
   orderedBurger: TOrder | null;
   loading: boolean;
@@ -18,7 +17,6 @@ interface TConstructorItems {
 
 const initialState: TConstructorItems = {
   bun: null,
-  price: 0,
   ingredients: [],
   orderedBurger: null,
   loading: false,
