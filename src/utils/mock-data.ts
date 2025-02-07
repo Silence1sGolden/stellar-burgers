@@ -8,6 +8,7 @@ import {
   TUserResponse
 } from '@api';
 import { TIngredient, TOrder, TUser } from '@utils-types';
+import { RootState } from 'src/services/store';
 
 export const ingredientsWithId = [
   {
@@ -184,3 +185,39 @@ export const expectedIngredientsResponse: TIngredientsResponse = {
   success: true,
   data: [bunIngredient, mainIngredient, souceIngredient]
 };
+
+export const rootStoreInitialState: RootState = {
+  user: {
+    isAuthChecked: false,
+    userOrders: [],
+    user: null,
+    loading: false,
+    error: null
+  },
+  feed: {
+    feed: {
+      orders: [],
+      total: 0,
+      success: false,
+      totalToday: 0
+    },
+    orderByNumber: null,
+    orderByNumberLoading: false,
+    loading: false,
+    error: null
+  },
+  constructorItems: {
+    bun: null,
+    ingredients: [],
+    orderedBurger: null,
+    loading: false,
+    error: null
+  },
+  ingredients: {
+    ingredients: [],
+    loading: false,
+    error: null
+  }
+};
+
+export const errorResponse = { message: expectedErrorMessage };

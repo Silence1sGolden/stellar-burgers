@@ -13,7 +13,9 @@ import {
 } from './constructorSlice';
 import {
   bunIngredient,
+  errorResponse,
   expectedBunIngredient,
+  expectedErrorMessage,
   expectedMainIngredient,
   expectedOrder,
   expectedRequestOrder,
@@ -36,14 +38,14 @@ afterAll(() => {
 });
 
 describe('Проверка constructorSlice', () => {
-  describe('Тестирование thunkActions и loading статус', () => {
+  describe('Тестирование thunkActions', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
 
-    test('Проверка requestOrder', async () => {
-      const requestData = ['id_1', 'id_2'];
+    const requestData = ['id_1', 'id_2'];
 
+    test('Проверка requestOrderResolved', async () => {
       jest.spyOn(Api, 'orderBurgerApi').mockImplementation(() => {
         expect(store.getState().constructorItems.loading).toBe(true);
         return Promise.resolve(expectedRequestOrder);
@@ -51,10 +53,26 @@ describe('Проверка constructorSlice', () => {
 
       await store.dispatch(requestOrder(requestData));
 
+      expect(store.getState().constructorItems.error).toBe(null);
       expect(store.getState().constructorItems.loading).toBe(false);
       expect(store.getState().constructorItems.orderedBurger).toEqual(
         expectedOrder
       );
+    });
+
+    test('Проверка requestOrderRejected', async () => {
+      jest.spyOn(Api, 'orderBurgerApi').mockImplementation(() => {
+        expect(store.getState().constructorItems.loading).toBe(true);
+        return Promise.reject(errorResponse);
+      });
+
+      await store.dispatch(requestOrder(requestData));
+
+      expect(store.getState().constructorItems.error).toBe(
+        expectedErrorMessage
+      );
+      expect(store.getState().constructorItems.loading).toBe(false);
+      expect(store.getState().constructorItems.orderedBurger).toEqual(null);
     });
   });
 

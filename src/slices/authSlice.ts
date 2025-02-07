@@ -53,8 +53,10 @@ export const getUser = createAsyncThunk('user/getUser', getUserApi);
 
 export const logoutUser = createAsyncThunk('user/logout', async function () {
   return logoutApi().then((data) => {
-    localStorage.removeItem('refreshToken');
-    deleteCookie('accessToken');
+    if (data.success) {
+      localStorage.removeItem('refreshToken');
+      deleteCookie('accessToken');
+    }
     return data;
   });
 });
@@ -168,15 +170,25 @@ const authSlice = createSlice({
         state.error = action.error.message!;
       })
 
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+
       .addCase(
         logoutUser.fulfilled,
         (state, action: PayloadAction<{ success: boolean }>) => {
+          state.loading = false;
           if (action.payload.success) {
             state.user = null;
             state.userOrders = [];
           }
         }
-      );
+      )
+
+      .addCase(logoutUser.rejected, (state, error) => {
+        state.error = error.error.message!;
+        state.loading = false;
+      });
   }
 });
 

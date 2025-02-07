@@ -10,6 +10,7 @@ import {
   requestFeeds
 } from './feedSlice';
 import {
+  errorResponse,
   expectedErrorMessage,
   expectedFeedsResponse,
   expectedOrder,
@@ -88,19 +89,53 @@ describe('Тестирование feedSlice', () => {
       jest.clearAllMocks();
     });
 
-    test('Проверка requestFeeds', async () => {
-      jest.spyOn(Api, 'getFeedsApi').mockResolvedValue(expectedFeedsResponse);
+    test('Проверка requestFeedsResolved', async () => {
+      jest.spyOn(Api, 'getFeedsApi').mockImplementation(() => {
+        expect(store.getState().feed.loading).toBe(true);
+        return Promise.resolve(expectedFeedsResponse);
+      });
       await store.dispatch(requestFeeds());
       expect(store.getState().feed.error).toBe(null);
+      expect(store.getState().feed.loading).toBe(false);
       expect(store.getState().feed.feed).toEqual(expectedFeedsResponse);
     });
 
-    test('Проверка reqGetOrderByNumber', async () => {
-      jest
-        .spyOn(Api, 'getOrderByNumberApi')
-        .mockResolvedValue(expectedOrderResponse);
+    test('Проверка requestFeedsRejected', async () => {
+      jest.spyOn(Api, 'getFeedsApi').mockImplementation(() => {
+        expect(store.getState().feed.loading).toBe(true);
+        return Promise.reject(errorResponse);
+      });
+      await store.dispatch(requestFeeds());
+      expect(store.getState().feed.error).toBe(expectedErrorMessage);
+      expect(store.getState().feed.loading).toBe(false);
+      expect(store.getState().feed.feed).toEqual({
+        orders: [],
+        total: 0,
+        success: false,
+        totalToday: 0
+      });
+    });
+
+    test('Проверка reqGetOrderByNumberResolved', async () => {
+      jest.spyOn(Api, 'getOrderByNumberApi').mockImplementation(() => {
+        expect(store.getState().feed.orderByNumberLoading).toBe(true);
+        return Promise.resolve(expectedOrderResponse);
+      });
       await store.dispatch(reqGetOrderByNumber(1));
       expect(store.getState().feed.orderByNumber).toEqual(expectedOrder);
+      expect(store.getState().feed.error).toBe(null);
+      expect(store.getState().feed.orderByNumberLoading).toBe(false);
+    });
+
+    test('Проверка reqGetOrderByNumberRejected', async () => {
+      jest.spyOn(Api, 'getOrderByNumberApi').mockImplementation(() => {
+        expect(store.getState().feed.orderByNumberLoading).toBe(true);
+        return Promise.reject(errorResponse);
+      });
+      await store.dispatch(reqGetOrderByNumber(1));
+      expect(store.getState().feed.error).toBe(expectedErrorMessage);
+      expect(store.getState().feed.orderByNumberLoading).toBe(false);
+      expect(store.getState().feed.orderByNumber).toEqual(null);
     });
   });
 });

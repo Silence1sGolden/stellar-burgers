@@ -76,9 +76,9 @@ const feedSlice = createSlice({
           state.orderByNumber = action.payload.orders[0];
         }
       )
-      .addCase(reqGetOrderByNumber.rejected, (state, action) => {
+      .addCase(reqGetOrderByNumber.rejected, (state, error) => {
         state.orderByNumberLoading = false;
-        state.error = action.error.message!;
+        state.error = error.error.message!;
       });
   }
 });

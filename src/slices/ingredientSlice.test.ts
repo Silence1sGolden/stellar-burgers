@@ -8,6 +8,8 @@ import {
   requestIngredients
 } from './ingredientsSlice';
 import {
+  errorResponse,
+  expectedErrorMessage,
   expectedIngredientsResponse,
   mainIngredient,
   souceIngredient
@@ -39,16 +41,32 @@ describe('Тестирование ingredientSlice', () => {
       });
     });
 
-    test('Проверка requestIngredients', async () => {
-      jest
-        .spyOn(Api, 'getIngredientsApi')
-        .mockResolvedValue(expectedIngredientsResponse.data);
+    test('Проверка requestIngredientsResolved', async () => {
+      jest.spyOn(Api, 'getIngredientsApi').mockImplementation(() => {
+        expect(store.getState().ingredients.loading).toBe(true);
+        return Promise.resolve(expectedIngredientsResponse.data);
+      });
 
       await store.dispatch(requestIngredients());
 
+      expect(store.getState().ingredients.loading).toBe(false);
+      expect(store.getState().ingredients.error).toBe(null);
       expect(store.getState().ingredients.ingredients).toEqual(
         expectedIngredientsResponse.data
       );
+    });
+
+    test('Проверка requestIngredientsRejected', async () => {
+      jest.spyOn(Api, 'getIngredientsApi').mockImplementation(() => {
+        expect(store.getState().ingredients.loading).toBe(true);
+        return Promise.reject(errorResponse);
+      });
+
+      await store.dispatch(requestIngredients());
+
+      expect(store.getState().ingredients.loading).toBe(false);
+      expect(store.getState().ingredients.error).toBe(expectedErrorMessage);
+      expect(store.getState().ingredients.ingredients).toEqual([]);
     });
   });
 
