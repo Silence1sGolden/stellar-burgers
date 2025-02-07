@@ -20,6 +20,7 @@ export const ProfileMenuUI: FC<ProfileMenuUIProps> = ({
       Профиль
     </NavLink>
     <NavLink
+      data-cy='history'
       to={'/profile/orders'}
       className={({ isActive }) =>
         `text text_type_main-medium text_color_inactive pt-4 pb-4 ${

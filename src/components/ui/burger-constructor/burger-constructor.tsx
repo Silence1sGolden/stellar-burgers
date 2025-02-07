@@ -50,6 +50,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         )
       ) : (
         <div
+          data-cy='take_filling'
           className={`${styles.noBuns} ml-8 mb-4 mr-5 text text_type_main-default`}
         >
           Выберите начинку
@@ -68,12 +69,13 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     ) : (
       <div
+        data-cy='take_bun'
         className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
       >
         Выберите булки
       </div>
     )}
-    <div className={`${styles.total} mt-10 mr-4`}>
+    <div data-cy='submit_order' className={`${styles.total} mt-10 mr-4`}>
       <div className={`${styles.cost} mr-10`}>
         <p className={`text ${styles.text} mr-2`}>{price}</p>
         <CurrencyIcon type='primary' />

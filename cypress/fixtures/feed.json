@@ -1,0 +1,49 @@
+{
+    "success": true,
+    "orders": [
+        {
+            "_id": "1",
+            "name": "Бургер с двойным соусом",
+            "status": "Готов",
+            "createdAt": "01.01.2025",
+            "updatedAt": "01.01.2025",
+            "number": 1,
+            "ingredients": [
+                "4",
+                "2",
+                "2",
+                "4"
+            ]
+        },
+        {
+            "_id": "2",
+            "name": "Бургер с котлетой",
+            "status": "Готов",
+            "createdAt": "02.01.2025",
+            "updatedAt": "02.01.2025",
+            "number": 2,
+            "ingredients": [
+                "4",
+                "3",
+                "4"
+            ]
+        },
+        {
+            "_id": "3",
+            "name": "Супер бургер",
+            "status": "Готов",
+            "createdAt": "02.01.2025",
+            "updatedAt": "02.01.2025",
+            "number": 3,
+            "ingredients": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ]
+        }
+    ],
+    "total": 3,
+    "totalToday": 0
+}

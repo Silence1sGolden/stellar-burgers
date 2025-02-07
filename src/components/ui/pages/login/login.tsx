@@ -20,6 +20,7 @@ export const LoginUI: FC<LoginUIProps> = ({
     <div className={`pt-6 ${styles.wrapCenter}`}>
       <h3 className='pb-6 text text_type_main-medium'>Вход</h3>
       <form
+        data-cy='login_form'
         className={`pb-15 ${styles.form}`}
         name='login'
         onSubmit={handleSubmit}

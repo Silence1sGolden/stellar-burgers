@@ -38,7 +38,9 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
             }
           >
             <ListIcon type={'primary'} />
-            <p className='text text_type_main-default ml-2'>Лента заказов</p>
+            <p data-cy='feed' className='text text_type_main-default ml-2'>
+              Лента заказов
+            </p>
           </Link>
         </div>
         <div className={styles.logo}>
@@ -53,7 +55,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
         >
           <Link to='/profile' className={styles.link}>
             <ProfileIcon type={'primary'} />
-            <p className='text text_type_main-default ml-2'>
+            <p data-cy='username' className='text text_type_main-default ml-2'>
               {userName || 'Личный кабинет'}
             </p>
           </Link>

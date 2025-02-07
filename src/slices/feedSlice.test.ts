@@ -24,14 +24,6 @@ let store = configureStore({
   }
 });
 
-beforeEach(() => {
-  store = configureStore({
-    reducer: {
-      feed: FeedReducer
-    }
-  });
-});
-
 afterAll(() => {
   jest.clearAllMocks();
 });
@@ -84,6 +76,14 @@ describe('Тестирование feedSlice', () => {
   });
 
   describe('Тестирование thunkActions', () => {
+    beforeEach(() => {
+      store = configureStore({
+        reducer: {
+          feed: FeedReducer
+        }
+      });
+    });
+
     afterEach(() => {
       jest.clearAllMocks();
     });

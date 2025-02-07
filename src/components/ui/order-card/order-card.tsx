@@ -13,6 +13,7 @@ import { OrderStatus } from '@components';
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
   ({ orderInfo, maxIngredients, locationState }) => (
     <Link
+      data-cy={`feed_elem_${orderInfo._id}`}
       to={orderInfo.number.toString()}
       relative='path'
       state={locationState}
