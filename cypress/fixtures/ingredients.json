@@ -1,0 +1,70 @@
+{
+    "success": "true",
+    "data": [
+        {
+            "_id": "1",
+            "name": "Ингредиент_1",
+            "type": "main",
+            "proteins": 65,
+            "fat": 62,
+            "carbohydrates": 96,
+            "calories": 42,
+            "price": 538,
+            "image": "some_url",
+            "image_large": "some_url",
+            "image_mobile": "some_url"
+        },
+        {
+            "_id": "4",
+            "name": "Ингредиент_4",
+            "type": "main",
+            "proteins": 42,
+            "fat": 75,
+            "carbohydrates": 12,
+            "calories": 23,
+            "price": 950,
+            "image": "some_url",
+            "image_large": "some_url",
+            "image_mobile": "some_url"
+        },
+        {
+            "_id": "2",
+            "name": "Ингредиент_2",
+            "type": "sauce",
+            "proteins": 12,
+            "fat": 50,
+            "carbohydrates": 10,
+            "calories": 17,
+            "price": 1350,
+            "image": "some_url",
+            "image_large": "some_url",
+            "image_mobile": "some_url"
+        },
+        {
+            "_id": "5",
+            "name": "Ингредиент_5",
+            "type": "sauce",
+            "proteins": 12,
+            "fat": 50,
+            "carbohydrates": 10,
+            "calories": 17,
+            "price": 1350,
+            "image": "some_url",
+            "image_large": "some_url",
+            "image_mobile": "some_url"
+        },
+        {
+            "_id": "3",
+            "name": "Ингредиент_3",
+            "type": "bun",
+            "proteins": 20,
+            "fat": 150,
+            "carbohydrates": 200,
+            "calories": 31,
+            "price": 5201,
+            "image": "some_url",
+            "image_large": "some_url",
+            "image_mobile": "some_url"
+        }
+    ]
+}

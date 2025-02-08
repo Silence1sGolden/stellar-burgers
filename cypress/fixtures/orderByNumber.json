@@ -1,0 +1,20 @@
+{
+    "success": true,
+    "orders": [
+        {
+            "_id": "3",
+            "status": "Готов",
+            "name": "Супер бургер",
+            "createdAt": "06.02.2025",
+            "updatedAt": "06.02.2025",
+            "number": "3",
+            "ingredients": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ]
+        }
+    ]
+}
