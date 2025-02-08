@@ -65,6 +65,7 @@ describe('проверяем доступность приложения', funct
     cy.get('[data-cy=submit_order] .button').click();
 
     cy.get('#modals .text_type_main-medium').contains('идентификатор заказа');
+    cy.get('#modals h2').contains('3');
     cy.get('#modals [type=button]').click();
 
     cy.get('[data-cy=take_bun]');
